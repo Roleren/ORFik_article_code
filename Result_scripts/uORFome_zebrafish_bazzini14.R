@@ -1,3 +1,7 @@
+#¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
+# uORFome pipeline for Bazzini et al 2014, with CAGE from nepal et al
+#¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
+#devtools::install_github("Roleren/uORFomePipe")
 library(uORFomePipe)
 
 # Output folder
@@ -38,6 +42,9 @@ exp.name.RNA <- "zf_baz14_RNA"
 # Run this line to reactivate database if you restarted session:
 uORFomePipe:::createDataBase(file.path(dataBaseFolder, "uorfCatalogue.sqlite"))
 
+prediction <- predictUorfs(mode = "uORFs")
+predictionVsCageHits(saveName = paste0("differential_", "uORFs", "_usage.pdf"), prediction = prediction)
+
 # Load results and do validations if you want now
 uORFs <- getUorfsInDb()
 listTables() # the data in database
@@ -47,3 +54,26 @@ colSums(pred)
 pred$total <- NULL # Remove total prediction column
 
 grl[rowSums(pred) == 4,] # uORF in all 4 tissues
+
+
+
+# Venn diagram polish
+uORFomePipe:::venn.diagram.uORFs(width = 4, height = 3)
+predictions = readTable("tissueAtlasByCageAndPred")
+preds <- copy(predictions)
+preds$total <- NULL
+preds <- preds[rowSums(preds) > 0, ]
+
+my_list <- list()
+for(i in seq_along(preds)) {
+  my_list[[length(my_list) + 1]] <- which(preds[, i, with = F] == 1)
+}
+
+VennDiagram::venn.diagram(imagetype = "png",
+                          x = my_list,
+                          category.names = colnames(preds),
+                          filename = 'venn_diagramm_uORFs.png',
+                          output=TRUE, units = "in",
+                          width = 3.3, height = 3.3,
+                          cat.dist =c(0.05,0.05,0.05), 
+                          print.mode = c("raw","percent"))

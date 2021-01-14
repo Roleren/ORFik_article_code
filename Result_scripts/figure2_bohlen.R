@@ -3,10 +3,11 @@
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Analysis April/May 2020
 # Contains data from Sel-TCP-seq Bohlen (HeLa cells) with CAGE from FANTOM 5
-
 library(ORFik); library(data.table)
 
+# Update this path (everything else should now run): ->
 plotFolder <- "/export/valenfs/projects/Hakon/ORFik_paper/"
+
 if (file.exists(file.path(plotFolder, "ORFik_paper_session.RData")))
   load(file.path(plotFolder, "ORFik_paper_session.RData"))
 ############################## CREATE Figure ###################################################
@@ -129,9 +130,7 @@ kozakHeat <- kozakHeatmap(seqs = seqs, rate = rates.heat[txNames %in% names(seqs
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 
 seqs <- startRegionString(leaders.cage[names(leaders.cage) %in% dt$txNames], NULL, df, 0, 4)
-
 rate <- dt[txNames %in% names(seqs)]$SE
-
 comb <- TOP.Motif.ecdf(seqs, rate, legend.position.1st = c(0.70, 0.28), legend.position.motif = c(0.70, 0.28))
 #ggslackR(plot = comb)
 
@@ -143,7 +142,7 @@ rates <- dt[(txNames %in% names(cds)) & RNA_MRNA_FPKM > 10, ]
 #rates <- dt[(txNames %in% names(cds)) & IR > 0.5, ]
 cds_k <- cds[names(cds) %in% rates$txNames]
 
-ranking <- kozak_IR_ranking(cds_k, mrna, rates)
+ranking <- ORFik:::kozak_IR_ranking(cds_k, mrna, rates, df, species = "zebrafish")
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Merge
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
@@ -158,3 +157,20 @@ final <- grid.arrange(coveragePlot ,hm, hm.LSU, hm.cage, hm.cage.LSU,
 ggsave(paste0(plotFolder, "Figure_2_new",df@experiment,".png"), plot = final, width = 10, height = 15, dpi = 300)
 save.image(file=file.path(plotFolder, "ORFik_paper_session.RData"))
 
+library(cowplot)
+lay_two <- rbind(c(1,2),
+             c(3,4))
+two <- grid.arrange(hm, hm.LSU, hm.cage, hm.cage.LSU, layout_matrix = lay_two)
+three <- grid.arrange(kozakHeat, comb, nrow = 1)
+
+final2 <- cowplot::plot_grid(coveragePlot, two, three, ranking, ncol = 1, labels = "AUTO", rel_heights = c(1,2,1,1), label_y = c(1, 1, 1, 1.1))
+ggsave(paste0(plotFolder, "Figure_3_new",df@experiment,".pdf"), plot = final2, width = 10, height = 15, dpi = 300)
+final2
+
+ranking2 <- kozak_IR_ranking(cds_k, mrna, rates, df, species = "zebrafish")
+coveragePlot2 <- windowCoveragePlot(rbindlist(list(metaLSU, metaSSU)), colors = c('orange', 'skyblue4'), scoring = "transcriptNormalized")
+coveragePlot2 <- windowCoveragePlot(rbindlist(list(metaLSU, metaSSU)), colors = c('orange', 'skyblue4'), scoring = "sum")
+
+final3 <- cowplot::plot_grid(coveragePlot2, two, three, ranking, ncol = 1, labels = "AUTO", rel_heights = c(1,2,1,1), label_y = c(1, 1, 1, 1.1))
+ggsave(paste0(plotFolder, "Figure_3_new2",df@experiment,".pdf"), plot = final3, width = 10, height = 15, dpi = 300)
+final3
