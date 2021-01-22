@@ -21,7 +21,7 @@ df <- df[df$rep == 1,] # We only need first replicate
 df.SSU <- df[df$libtype == "SSU", ]
 df.LSU <- df[df$libtype == "LSU", ]
 # mRNA
-df.rna <- read.experiment("zf_RNA_bohlen")
+df.rna <- read.experiment("bohlen_RNA")
 # CAGE
 df.cage <- read.experiment("cage_fantom_sub")
 
@@ -142,7 +142,7 @@ rates <- dt[(txNames %in% names(cds)) & RNA_MRNA_FPKM > 10, ]
 #rates <- dt[(txNames %in% names(cds)) & IR > 0.5, ]
 cds_k <- cds[names(cds) %in% rates$txNames]
 
-ranking <- ORFik:::kozak_IR_ranking(cds_k, mrna, rates, df, species = "zebrafish")
+ranking <- ORFik:::kozak_IR_ranking(cds_k, mrna, rates, df, species = "human")
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Merge
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
@@ -167,10 +167,10 @@ final2 <- cowplot::plot_grid(coveragePlot, two, three, ranking, ncol = 1, labels
 ggsave(paste0(plotFolder, "Figure_3_new",df@experiment,".pdf"), plot = final2, width = 10, height = 15, dpi = 300)
 final2
 
-ranking2 <- kozak_IR_ranking(cds_k, mrna, rates, df, species = "zebrafish")
-coveragePlot2 <- windowCoveragePlot(rbindlist(list(metaLSU, metaSSU)), colors = c('orange', 'skyblue4'), scoring = "transcriptNormalized")
-coveragePlot2 <- windowCoveragePlot(rbindlist(list(metaLSU, metaSSU)), colors = c('orange', 'skyblue4'), scoring = "sum")
-
-final3 <- cowplot::plot_grid(coveragePlot2, two, three, ranking, ncol = 1, labels = "AUTO", rel_heights = c(1,2,1,1), label_y = c(1, 1, 1, 1.1))
-ggsave(paste0(plotFolder, "Figure_3_new2",df@experiment,".pdf"), plot = final3, width = 10, height = 15, dpi = 300)
-final3
+# ranking2 <- kozak_IR_ranking(cds_k, mrna, rates, df, species = "human")
+# coveragePlot2 <- windowCoveragePlot(rbindlist(list(metaLSU, metaSSU)), colors = c('orange', 'skyblue4'), scoring = "transcriptNormalized")
+# coveragePlot2 <- windowCoveragePlot(rbindlist(list(metaLSU, metaSSU)), colors = c('orange', 'skyblue4'), scoring = "sum")
+# 
+# final3 <- cowplot::plot_grid(coveragePlot2, two, three, ranking, ncol = 1, labels = "AUTO", rel_heights = c(1,2,1,1), label_y = c(1, 1, 1, 1.1))
+# ggsave(paste0(plotFolder, "Figure_3_new2",df@experiment,".pdf"), plot = final3, width = 10, height = 15, dpi = 300)
+# final3

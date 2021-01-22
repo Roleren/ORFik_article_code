@@ -1,6 +1,7 @@
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # uORFome pipeline for Bazzini et al 2014, with CAGE from nepal et al
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
+### This script uses the extension package for ORFik called uORFomePipe, install if wanted.
 #devtools::install_github("Roleren/uORFomePipe")
 library(uORFomePipe)
 
@@ -57,7 +58,7 @@ grl[rowSums(pred) == 4,] # uORF in all 4 tissues
 
 
 
-# Venn diagram polish
+# Venn diagram custom
 uORFomePipe:::venn.diagram.uORFs(width = 4, height = 3)
 predictions = readTable("tissueAtlasByCageAndPred")
 preds <- copy(predictions)
@@ -73,6 +74,15 @@ VennDiagram::venn.diagram(imagetype = "png",
                           x = my_list,
                           category.names = colnames(preds),
                           filename = 'venn_diagramm_uORFs.png',
+                          output=TRUE, units = "in",
+                          width = 3.3, height = 3.3,
+                          cat.dist =c(0.05,0.05,0.05), 
+                          print.mode = c("raw","percent"))
+
+VennDiagram::venn.diagram(imagetype = "pdf",
+                          x = my_list,
+                          category.names = colnames(preds),
+                          filename = 'venn_diagramm_uORFs.pdf',
                           output=TRUE, units = "in",
                           width = 3.3, height = 3.3,
                           cat.dist =c(0.05,0.05,0.05), 

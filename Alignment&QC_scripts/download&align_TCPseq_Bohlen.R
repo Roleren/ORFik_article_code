@@ -81,7 +81,7 @@ create.experiment(paste0(alignment, "/aligned/"), exper = "sel_TCP_bohlen",
                   pairedEndBam = study.tcp$LibraryLayout == "PAIRED",
                   viewTemplate = FALSE)
 # mRNA-seq
-create.experiment(paste0(alignment.rna, "/aligned/"), exper = "zf_RNA_bohlen",
+create.experiment(paste0(alignment.rna, "/aligned/"), exper = "bohlen_RNA",
                   fa = annotation["genome"],
                   txdb = paste0(annotation["gtf"], ".db"),
                   organism = organism,
@@ -92,7 +92,7 @@ create.experiment(paste0(alignment.rna, "/aligned/"), exper = "zf_RNA_bohlen",
 library(ORFik)
 df <- read.experiment("sel_TCP_bohlen")
 df.LSU <- df[df$libtype == "LSU", ] # <- subset to 80S, used later
-df.rna <- read.experiment("zf_RNA_bohlen")
+df.rna <- read.experiment("bohlen_RNA")
 
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Convert files to ofst and run Annotation To alignment QC
@@ -106,7 +106,7 @@ ORFikQC(df.rna); remove.experiments(df.rna)
 heatMapRegion(df, region = c("TSS", "TIS", "TTS"), shifting = "5prime")
 
 # With CAGE
-cage.sample <- "/export/valenfs/projects/uORFome/DATA/CAGE/human/Mammary%20Epithelial%20Cell%2c%20donor1.CNhs11077.11273-116H4.hg38.nobarcode.ctss.bed.gz"
+cage.sample <- read.experiment("cage_fantom_sub")$filepath
 heatMapRegion(df, region = c("TSS"), shifting = "5prime",
               cage = cage.sample,
               outdir = paste0(dirname(df$filepath[1]), "/QC_STATS/heatmaps/TSS_CAGE/"))
