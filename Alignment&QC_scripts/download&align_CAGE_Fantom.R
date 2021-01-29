@@ -1,15 +1,14 @@
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
-# CAGE Homo sapiens (ovary, cervix)(Forrest et al, FANTOM5 Consortium 2014)
+# CAGE Homo sapiens (ovary, cervix) (Forrest et al, FANTOM5 Consortium 2014)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Article: 
 library(ORFik)
-#cage <- "/export/valenfs/projects/Hakon/uORFomes/uORFome_human_fantom/DATA/CAGE/human/Mammary%20Epithelial%20Cell%2c%20donor1.CNhs11077.11273-116H4.hg38.nobarcode.ctss.bed.gz"
-#cage <- "/export/valenfs/projects/Hakon/uORFomes/uORFome_human_fantom/DATA/CAGE/human/ovary%2c%20adult%2c%20pool1.CNhs10626.10020-101D2.hg38.nobarcode.ctss.bed.gz"
+
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Settings (This is the only Custom part per user, rest you can just run)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # This is where you want your annotation and STAR index
-annotation <- "/export/valenfs/data/references/Zv10_zebrafish/"
+annotation <- "/export/valenfs/data/references/Homo_sapiens_GRCh38_101/"
 # Where to download fastq files
 fastq.dir <- "/export/valenfs/data/raw_data/CAGE/FANTOM_subset_human/"
 # Where you want mapped bam files
