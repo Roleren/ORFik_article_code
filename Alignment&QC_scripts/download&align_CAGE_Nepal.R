@@ -7,12 +7,16 @@ library(ORFik)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Settings (This is the only Custom part per user, rest you can just run)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
+conf <- config.exper(experiment = "nepal_2013_zebrafish",
+                     assembly = "Danio_rerio_GRCz10",
+                     type = c("CAGE"))
+
 # This is where you want your annotation and STAR index
-annotation <- "/export/valenfs/data/references/Zv10_zebrafish/"
+annotation <- conf["ref"]
 # Where to download fastq files
-fastq.dir <- "/export/valenfs/data/raw_data/CAGE/Nepal_2013_zebrafish/"
+fastq.dir <- conf["fastq CAGE"]
 # Where you want mapped bam files
-bam.dir <- "/export/valenfs/data/processed_data/CAGE/nepal_2013_zebrafish/"
+bam.dir <- conf["bam CAGE"]
 
 # SRA Meta data download (work for ERA and DRA too)
 study <- download.SRA.metadata("SRA055273", fastq.dir)
@@ -48,11 +52,10 @@ index <- STAR.index(annotation, wait = TRUE)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # All data is single end
 paired.end <- study$LibraryLayout == "PAIRED"
-paired.end.all <- all(paired.end)
 
 alignment <-
   STAR.align.folder(fastq.dir, bam.dir, index,
-                    paired.end = paired.end.all,
+                    paired.end = paired.end,
                     steps = "tr-co-ge", # (trim needed: adapters found, then genome)
                     adapter.sequence = "auto", # Adapters are auto detected
                     max.cpus = 80, trim.front = 0, min.length = 20)

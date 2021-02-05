@@ -8,13 +8,17 @@ library(ORFik)
 # Settings (This is the only Custom part per user, rest you can just run)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # This is where you want your annotation and STAR index
-annotation <- "/export/valenfs/data/references/Homo_sapiens_GRCh38_110/"
+conf <- config.exper(experiment = "Bohlen",
+                     assembly = "Homo_sapiens_GRCh38_110",
+                     type = c("TCP-seq", "RNA-Seq"))
+
+annotation <- conf["ref"]
 # Where to download fastq files
-fastq.dir <- "/export/valenfs/data/raw_data/TCP-seq/sel-TCPSeq_Bohlen/"
-fastq.dir.rna <- "/export/valenfs/data/raw_data/RNA-Seq/Bohlen/"
+fastq.dir <- conf["fastq TCP-seq"]#"/export/valenfs/data/raw_data/TCP-seq/sel-TCPSeq_Bohlen/"
+fastq.dir.rna <- conf["fastq RNA-Seq"]
 # Where you want mapped bam files
-bam.dir <- "/export/valenfs/data/processed_data/TCP-seq/sel-TCPSeq_Bohlen/"
-bam.dir.rna <- "/export/valenfs/data/processed_data/RNA-seq/Bohlen/"
+bam.dir <- conf["bam TCP-seq"]
+bam.dir.rna <- conf["bam RNA-Seq"]
 
 # Get SRR numbers (if you don't have files and they exist on SRA, ENA, etc..)
 study <- download.SRA.metadata("PRJNA579539", fastq.dir)

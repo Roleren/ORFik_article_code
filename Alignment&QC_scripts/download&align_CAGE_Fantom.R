@@ -5,23 +5,22 @@
 library(ORFik)
 
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
-# Settings (This is the only Custom part per user, rest you can just run)
+# Config
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
-# This is where you want your annotation and STAR index
-annotation <- "/export/valenfs/data/references/Homo_sapiens_GRCh38_101/"
-# Where to download fastq files
-fastq.dir <- "/export/valenfs/data/raw_data/CAGE/FANTOM_subset_human/"
-# Where you want mapped bam files
-bam.dir <- "/export/valenfs/data/processed_data/CAGE/FANTOM_subset_human/"
+# Specify paths wanted for NGS data, genome, annotation and STAR index
+# If you use local files, make a conf variable with existing directories
+conf <- config.exper(experiment = "FANTOM_subset_human",
+                     assembly = "Homo_sapiens_GRCh38_110",
+                     type = c("CAGE"))
 
-# SRA Meta data download (work for ERA and DRA too)
-study <- download.SRA.metadata("DRR041459", fastq.dir)
+# SRA Meta data download (works for ERA and DRA too)
+study <- download.SRA.metadata("DRR041459", conf["fastq CAGE"])
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Download fastq files for experiment and rename (Skip if you have the files already)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 
 # Download fastq files (uses SRR numbers (Run column) from study)
-download.SRA(study, fastq.dir, rename = FALSE)
+download.SRA(study, conf["fastq CAGE"], rename = FALSE)
 
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Annotation
@@ -34,7 +33,7 @@ annotation <- getGenomeAndAnnotation(
   organism = organism,
   genome = TRUE, GTF = TRUE,
   phix = TRUE, ncRNA = TRUE, tRNA = TRUE, rRNA = TRUE,
-  output.dir = annotation,
+  output.dir = conf["ref"],
   assembly_type = "primary_assembly"
 )
 
@@ -48,24 +47,24 @@ index <- STAR.index(annotation, wait = TRUE)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # All data is single end
 paired.end <- study$LibraryLayout == "PAIRED"
-paired.end.all <- all(paired.end)
 
 alignment <-
-  STAR.align.folder(fastq.dir, bam.dir, index,
-                    paired.end = paired.end.all,
+  STAR.align.folder(conf["fastq CAGE"], conf["bam CAGE"], index,
+                    paired.end = paired.end,
                     steps = "tr-co-ge", # (trim needed: adapters found, then genome)
-                    adapter.sequence = "auto", # Adapters are auto detected
+                    adapter.sequence = "small_RNA", # Adapters are auto detected
                     max.cpus = 80, trim.front = 0, min.length = 20)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Create experiment (Starting point if alignment is finished)
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 library(ORFik)
-create.experiment(paste0(alignment, "/aligned/"), exper = "cage_fantom_sub",
+create.experiment(paste0(conf["bam CAGE"], "/aligned/"), 
+                  exper = "cage_fantom_sub",
                   fa = annotation["genome"],
                   txdb = paste0(annotation["gtf"], ".db"),
                   organism = organism,
                   viewTemplate = FALSE)
-# Now fix experiment non-unique rows in Excel, Libre office ...
+# Experiment is ready
 df <- read.experiment("cage_fantom_sub")
 
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
