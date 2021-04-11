@@ -96,20 +96,20 @@ STAR.align.folder(conf["fastq merged RNA-Seq"], conf["bam merged RNA-Seq"], inde
 library(ORFik)
 
 create.experiment(paste0(conf["bam merged Ribo-Seq"], "/aligned/"), 
-                  exper = "zf_baz14_RFP_all",
+                  exper = "zf_baz14_RFP",
                   fa = annotation["genome"],
                   txdb = paste0(annotation["gtf"], ".db"),
                   organism = organism,
                   viewTemplate = FALSE)
 create.experiment(paste0(conf["bam merged RNA-Seq"], "/aligned/"), 
-                  exper = "zf_baz14_RNA_all",
+                  exper = "zf_baz14_RNA",
                   fa = annotation["genome"],
                   txdb = paste0(annotation["gtf"], ".db"),
                   organism = organism,
                   viewTemplate = FALSE)
 # Now fix experiment non-unique rows in Excel, Libre office (I keep only rep 1 & 2 here)...
-df <- read.experiment("zf_baz14_RFP_all")
-df.rna <- read.experiment("zf_baz14_RNA_all")
+df <- read.experiment("zf_baz14_RFP")
+df.rna <- read.experiment("zf_baz14_RNA")
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Convert files and run Annotation vs alignment QC
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#

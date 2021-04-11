@@ -66,14 +66,14 @@ STAR.align.folder(conf["fastq RNA-Seq"], conf["bam RNA-Seq"], index,
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 library(ORFik)
 create.experiment(paste0(conf["bam Ribo-Seq"], "/aligned/"), 
-                  exper = "zf_baz14_RFP",
+                  exper = "zf_baz14_RFP_all",
                   fa = annotation["genome"],
                   txdb = paste0(annotation["gtf"], ".db"),
                   organism = organism,
                   stage = c(rep("12h", 3), rep("24h",2), rep("2h",3),  c("48h", "48h")),
                   viewTemplate = FALSE)
 create.experiment(paste0(conf["bam RNA-Seq"], "/aligned/"), 
-                  exper = "zf_baz14_RNA",
+                  exper = "zf_baz14_RNA_all",
                   fa = annotation["genome"],
                   txdb = paste0(annotation["gtf"], ".db"),
                   organism = organism, 
@@ -81,8 +81,8 @@ create.experiment(paste0(conf["bam RNA-Seq"], "/aligned/"),
                   stage = c(rep("12h", 2), rep("24h", 2), rep("2h", 2), rep("48h", 3)),
                   viewTemplate = FALSE)
 # Now fix experiment non-unique rows in Excel, Libre office ...
-df <- read.experiment("zf_baz14_RFP") #conf["exp Ribo-Seq"]
-df.rna <- read.experiment("zf_baz14_RNA") #conf["exp RNA-Seq"]
+df <- read.experiment("zf_baz14_RFP_all") #conf["exp Ribo-Seq"]
+df.rna <- read.experiment("zf_baz14_RNA_all") #conf["exp RNA-Seq"]
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#
 # Convert files and run Annotation vs alignment QC
 #¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤#

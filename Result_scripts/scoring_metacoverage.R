@@ -22,7 +22,7 @@ windowSize = windowSize)
 coverage <- rbindlist(coverage)
 
 coverage[, fraction := gsub("LSU", "80S", fraction)]
-coverage[, fraction := gsub("SSU", "43S", fraction)]
+#coverage[, fraction := gsub("SSU", "43S", fraction)]
 coverage[, feature := gsub("leaders", "5´UTRs", feature)]
 coverage[, feature := gsub("cds", "CDS", feature)]
 coverage[, feature := gsub("trailers", "3´UTRs", feature)]

@@ -6,7 +6,7 @@
 library(uORFomePipe)
 
 # Output folder
-mainPath = "/export/valenfs/projects/Hakon/uORFomes/uORFome_zebrafish_bazzini_test4"
+mainPath <- "/export/valenfs/projects/Hakon/uORFomes/uORFome_zebrafish_bazzini_test4"
 # Input data experiment creation
 exp.name.CAGE <- "zf_nepal"
 exp.name.RFP <- "zf_baz14_RFP"
@@ -76,7 +76,7 @@ VennDiagram::venn.diagram(imagetype = "png",
                           filename = 'venn_diagramm_uORFs.png',
                           output=TRUE, units = "in",
                           width = 3.3, height = 3.3,
-                          cat.dist =c(0.05,0.05,0.05), 
+                          cat.dist =c(0.05,0.05,0.05),
                           print.mode = c("raw","percent"))
 
 VennDiagram::venn.diagram(imagetype = "pdf",
@@ -85,5 +85,5 @@ VennDiagram::venn.diagram(imagetype = "pdf",
                           filename = 'venn_diagramm_uORFs.pdf',
                           output=TRUE, units = "in",
                           width = 3.3, height = 3.3,
-                          cat.dist =c(0.05,0.05,0.05), 
+                          cat.dist =c(0.05,0.05,0.05),
                           print.mode = c("raw","percent"))
